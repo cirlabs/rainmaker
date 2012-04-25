@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>{{ donor }}<p>
+<p>Wins/Losses/WinPct: {{ donor.wins }} / {{ donor.losses }} / {{ donor.win_pct }}</p>
+
+<p><a href="download/">Download</a></p>
+<table>
+    <tr>
+        <td><strong>Recipient</strong></td>
+        <td><strong>Date</strong></td>
+        <td><strong>Amount</strong></td>
+    <tr>
+    {% for rc in donor.relatedcontribution_set.all %}
+    <tr>
+        <td><a href="{{ rc.contribution.get_absolute_url }}">{{ rc.contribution.recipient_name }}</a></td>
+        <td>{{ rc.contribution.date }}</td>
+        <td>{{ rc.contribution.amount }}</td>
+    </tr>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<ul>
+	{% for d in donor_list %}
+	<li><a href="{{ d.get_absolute_url }}">{{ d.name }}</a></li>
+	{% endfor %}
+</ul>
+{% endblock %}
