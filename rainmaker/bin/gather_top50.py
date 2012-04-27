@@ -5,17 +5,17 @@ from apps.contributions.models import Contribution, RelatedContribution
 from apps.donors.models import Donor
 
 
-def gather_donors(n):
+def gather_groups(n):
 	groups = Contribution.objects.filter(
-		contributor_type='C').values("organization_name", ).annotate(
+		contributor_type='C').values("donor_name", ).annotate(
 			Sum("amount"), Count('amount')).order_by('-amount__sum')[:n]
 	for g in groups:
-		donor, created = Donor.objects.get_or_create(name = g['organization_name'],
-            slug = '%s-%s' % (slugify(g['organization_name'])[:45], random.randrange(1000)),
+		donor, created = Donor.objects.get_or_create(name = g['donor_name'],
+            slug = '%s-%s' % (slugify(g['donor_name'])[:45], random.randrange(1000)),
 			type = 'C',
 			contribs_sum = g['amount__sum'],
 		    contribs_count = g['amount__count'])
-		for contribution in Contribution.objects.filter(organization_name=donor.name):
+		for contribution in Contribution.objects.filter(donor_name=donor.name):
 			rc = RelatedContribution.objects.create(contribution=contribution, donor=donor)
 	return
 
@@ -35,4 +35,4 @@ def gather_individs(n):
 
 if __name__ == '__main__':
 	gather_groups(50)
-	gather_individs(50)
+	#gather_individs(50)

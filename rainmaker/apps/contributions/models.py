@@ -2,6 +2,8 @@ from django.db import models
 from apps.donors.models import Donor
 
 
+########## BASE MODELS AND ABSTRACT CLASSES (DON'T MESS WITH THESE) ##########
+
 class Catcode(models.Model):
     source = models.CharField(max_length=255)
     code = models.CharField(primary_key=True, max_length=10, db_index=True)
@@ -13,7 +15,7 @@ class Catcode(models.Model):
         return self.name
 
 
-class Contribution(models.Model):
+class ContributionBase(models.Model):
     cycle = models.IntegerField(db_index=True)
     transaction_namespace = models.CharField(max_length=255, blank=True)
     transaction_id = models.CharField(max_length=255, db_index=True)
@@ -57,6 +59,7 @@ class Contribution(models.Model):
 
     class Meta:
         ordering = ('-date',)
+        abstract = True
 
     def __unicode__(self):
         return '$%s contribution from %s to %s in %s' % (self.amount,
@@ -65,6 +68,19 @@ class Contribution(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('contribution_detail', (), {'pk': self.id})
+
+
+########## CHILD CLASSES AND CONCRETE MODELS (MESS WITH THESE) ##########
+
+class Contribution(ContributionBase):
+    date_fixed = models.DateField(blank=True, null=True, db_index=True)
+    donor_name = models.CharField(max_length=255, blank=True, db_index=True)
+    is_ballot = models.CharField(max_length=1, blank=True)
+    new_contest_result = models.CharField(max_length=1, blank=True)
+
+    def __unicode__(self):
+        return '$%s contribution from %s to %s in %s' % (self.amount,
+            self.donor_name, self.recipient_name, self.date_fixed.year)
 
 
 class RelatedContribution(models.Model):
