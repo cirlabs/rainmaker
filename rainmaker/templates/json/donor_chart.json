@@ -1,0 +1,16 @@
+[
+    {% regroup weeks by year as year_list %}
+    {% for year in year_list %}
+    {
+        "numYear": {{ year.grouper|floatformat:"-1" }},
+        "weeks": [
+            {% for week in year.list %}
+            {
+                "week": {{ week.week|floatformat:"-1"  }},
+                "total": {{ week.contribution__amount__sum }}
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+]

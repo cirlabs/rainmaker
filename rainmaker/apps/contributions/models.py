@@ -86,6 +86,7 @@ class Contribution(ContributionBase):
 class RelatedContribution(models.Model):
     contribution = models.ForeignKey(Contribution, db_index=True)
     donor = models.ForeignKey(Donor, db_index=True)
+    #interestingness = models.FloatField(blank=True, null=True)
 
     class Meta:
         ordering = ('-contribution__amount',)

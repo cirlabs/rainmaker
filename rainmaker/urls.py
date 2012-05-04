@@ -4,7 +4,7 @@ from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from apps.contributions.views import ContributionDetailView
-from apps.donors.views import DonorListView, DonorDetailView, DonorContributionList
+from apps.donors.views import *
 
 admin.autodiscover()
 
@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^donors/(?P<slug>.+)/download/$', DonorContributionList.as_view(), name="donor_download"),
     url(r'^donors/(?P<slug>.+)/$', DonorDetailView.as_view(), name="donor_detail"),
     url(r'^contributions/(?P<pk>\d+)/$', ContributionDetailView.as_view(), name="contribution_detail"),
+    url(r'^json/timeline/(?P<slug>.+)/$', DonorTimelineJSON.as_view(), name="timeline_json"),
 )
 
 urlpatterns += staticfiles_urlpatterns()
