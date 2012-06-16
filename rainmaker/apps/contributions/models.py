@@ -83,6 +83,13 @@ class Contribution(ContributionBase):
         return '$%s contribution from %s to %s in %s' % (self.amount,
             self.donor_name, self.recipient_name, self.date_fixed.year)
 
+    @property
+    def is_ballot(self):
+        is_ballot = False
+        if self.related_proposition is not None:
+            is_ballot = True
+        return is_ballot
+
 
 class RelatedContribution(models.Model):
     contribution = models.ForeignKey(Contribution, db_index=True)
@@ -202,7 +209,6 @@ class RelatedContribution(models.Model):
     
     @property
     def bool_winner(self):
-        
         if self.bool_candidate:
             #candidate winner
             if self.contribution.seat_result == 'W':

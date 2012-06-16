@@ -10,6 +10,7 @@ class RelatedDonorInline(admin.TabularInline):
 class DonorAdmin(admin.ModelAdmin):
     inlines = [RelatedDonorInline,]
     filter_horizontal = ('badges',)
+    search_fields = ['name',]
 admin.site.register(Donor, DonorAdmin)
 
 
