@@ -8,4 +8,7 @@ class RelatedCommitteeInline(admin.TabularInline):
 
 class PropositionAdmin(admin.ModelAdmin):
     inlines = [RelatedCommitteeInline,]
+    list_display = ['title', 'cycle', 'subject', 'result', 'ext_link']
+    search_fields = ['title', 'description', 'subject', 'number']
+    list_filter = ['cycle', 'result']
 admin.site.register(Proposition, PropositionAdmin)
