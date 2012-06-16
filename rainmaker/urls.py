@@ -36,10 +36,6 @@ urlpatterns = patterns('',
 
     # API URLs
     (r'^api/', include(v1_api.urls)),
-
-    # Static pages
-    url(r'^api/$', 'django.views.generic.simple.direct_to_template', {'template': 'donors/api.html'}, name="api_index"),
-    url(r'^your-state/$', 'django.views.generic.simple.direct_to_template', {'template': 'donors/api.html'}, name="your_state"),
 )
 
 urlpatterns += staticfiles_urlpatterns()

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load humanize chunks donor_extras %}
+
+{% block title %}{% captureas title %}{% chunk "title" %}{% endcaptureas %}{{ title|striptags }}: {{ flatpage.title }}{% endblock %}
+{% block og_title %}{% captureas title %}{% chunk "title" %}{% endcaptureas %}{{ title|striptags }}: California Rainmaker API{% endblock %}
+
+{% block content %}
+
+{{ flatpage.content }}
+
+    <ul class="nav nav-tabs nav-stacked span3">
+        {% include "donors/includes/right_navigation.html" %}
+    </ul>
+
+{% endblock %}
