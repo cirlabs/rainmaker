@@ -1,3 +1,4 @@
+{% load humanize %}
 [
     {% regroup weeks by year as year_list %}
     {% for year in year_list %}

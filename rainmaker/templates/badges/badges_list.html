@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span9">
+        <section id="badge-list">
+            <h1>Donor badges</h1>
+            <table cellpadding="0" cellspacing="0" border="0">
+                {% for b in badge_list %}
+                <tr>
+                    <td class="badge-image">
+                        <a name="{{ b.slug }}"></a><div class="badge-name">{{ b.name }}</div>
+                        <img src="{{ STATIC_URL }}{{ b.image }}" width="100" height="100"/>
+                    </td>
+                    <td class="badge-description">
+                        {{ b.short_description }}
+                        <a class="badge-recipients" href="{{ b.get_absolute_url }}">List all {{ b.donor_count }} recipients</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+    </div>
+</div>
+
+{% endblock %}

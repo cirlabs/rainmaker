@@ -1,0 +1,20 @@
+{% load humanize %}
+				<tr>
+					<td class="rank">{{ donor.donor_rank }}</td>
+					<td class="donor">
+						{% if donor.image %}
+						<img class="mug" src="{{ STATIC_URL }}{{ donor.image }}" width="50"/>
+						{% endif %}
+						<span class="donor-name"><a href="{{ donor.get_absolute_url }}">{{ donor.name }}</a>{% if donor.location_city != '' %}, {{ donor.location_city }}{% endif %}{% if donor.location_state != '' %}, {{ donor.location_state }}{% endif %}</span>
+						<span class="donor-descrip">{{ donor.line_of_work }}</span>
+						{{ donor.contribs_count|intcomma }} donations: {{ donor.cand_contrib_count|intcomma }} to candidates, {{ donor.ballot_contrib_count|intcomma }} to ballot measures and {{ donor.party_contrib_count|intcomma }} to parties
+					</td>
+					<td class="badges">
+						<ul>{% for b in donor.badges.all %}
+							<li title="{{ b.name }}" data-content="{{ b.short_description }}">
+								<a href="{{ b.get_absolute_url }}"><img src="{{ STATIC_URL }}{{ b.image }}" width="30" height="30"/></a>
+							</li>
+						{% endfor %}</ul>
+					</td>
+					<td class="amount">${{ donor.contribs_sum|floatformat:0|intcomma }}</td>
+				</tr>

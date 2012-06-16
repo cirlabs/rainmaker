@@ -1,24 +1,57 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+{% load chunks donor_extras %}
+<!DOCTYPE html>
+<html lang="en" xmlns:fb="http://ogp.me/ns/fb#">
 <head>
-<title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" type="text/css" charset="utf-8"/>
-	<script type="text/javascript">
+  <title>{% block title %}{% endblock %}</title>
 
-  		var _gaq = _gaq || [];
-  		_gaq.push(['_setAccount', 'UA-2147301-15']);
-  		_gaq.push(['_setDomainName', '.cironline.org']);
-  		_gaq.push(['_trackPageview']);
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{% block meta_description %}{% captureas intro_text %}{% chunk "intro_text" %}{% endcaptureas %}{{ intro_text|striptags }}{% endblock %}">
 
-  		(function() {
-    		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  		})();
-	</script>
+  <meta property="og:title" content="{% block og_title %}{% captureas title %}{% chunk "title" %}{% endcaptureas %}{{ title|striptags }}{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}{% captureas intro_text %}{% chunk "intro_text" %}{% endcaptureas %}{{ intro_text|striptags }}{% endblock %}" />
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="{% block custom_url %}{{ request.get_full_path }}{% endblock %}"/>
+  <meta property="og:site_name" content="{% block custom_sitename %}{% captureas title %}{% chunk "title" %}{% endcaptureas %}{{ title|striptags }}{% endblock %}"/>
+  <meta property="og:image" content="{% block custom_og_image %}{% endblock %}"/>
+  <meta property="fb:app_id" content=""/>
+
+  <link rel="stylesheet" href="{{ STATIC_URL }}css/base.css" type="text/css" charset="utf-8"/>
+  <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+	
+  {% chunk "google_analytics_bug" %}
+
+  <script type="text/javascript" src="http://use.typekit.com/onc8drm.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+  <script src="{{ STATIC_URL }}js/modernizr-custom-2.5.3.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery-1.7.2.min.js"></script>
+  <script src="{{ STATIC_URL }}js/raphael-2.1.0-min.js"></script>
+  <script src="{{ STATIC_URL }}js/bootstrap-tab.js"></script>
+  <script src="{{ STATIC_URL }}js/bootstrap-tooltip.js"></script>
+  <script src="{{ STATIC_URL }}js/bootstrap-popover.js"></script>
+
+  {% block extra_js %}{% endblock %}
+
 </head>
 <body>
-{% block content %}{% endblock %}
+  <section id="main-body">
+
+      <article class="row-fluid">
+
+        <header>
+          <h1>{% block main-headline %}{% chunk "title" %}{% endblock %}</h1>
+          <p class="intro-text">{% block intro-text %}{% chunk "intro_text" %}{% endblock %}</p>
+        </header>
+
+        <section id="main-body">
+          {% block content %}{% endblock %}
+          {% block site-credits %}{% chunk "site_credits" %}{% endblock %}
+          <footer>
+            <p class="sourceline">{% block sourceline %}{% endblock %}</p>
+          </footer>
+        </section>
+
+      </article>
+  </section>
 </body>
 </html>

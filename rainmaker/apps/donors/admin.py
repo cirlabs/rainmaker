@@ -1,14 +1,18 @@
 from django.contrib import admin
-from apps.donors.models import Donor, Badge
-from apps.contributions.models import RelatedContribution
+from apps.donors.models import Donor, RelatedDonor, Badge
 
-
-class RelatedContributionInline(admin.TabularInline):
-    model = RelatedContribution
-    raw_id_fields = ('contribution',)
+class RelatedDonorInline(admin.TabularInline):
+    model = RelatedDonor
+    fk_name = 'donor'
+    raw_id_fields = ('related_donor',)
 
 
 class DonorAdmin(admin.ModelAdmin):
-    inlines = [RelatedContributionInline,]
+    inlines = [RelatedDonorInline,]
     filter_horizontal = ('badges',)
 admin.site.register(Donor, DonorAdmin)
+
+
+class BadgeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Badge, BadgeAdmin)

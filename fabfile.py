@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 Base configuration
 """
 env.project_name = 'rainmaker'
+env.db_name = 'rainmaker_wa'
 env.database_password = '31c3Ybvhvs'
 env.site_media_prefix = "site_media"
 env.admin_media_prefix = "admin_media"
@@ -110,11 +111,11 @@ def create_database(func=run):
     """
     Creates the user and database for this project.
     """
-    func('echo "CREATE USER %(project_name)s WITH PASSWORD \'%(database_password)s\';" | psql postgres' % env)
-    func('createdb -O %(project_name)s %(project_name)s -T template_postgis' % env)
-    func('echo "GRANT ALL PRIVILEGES ON %(project_name)s to %(project_name)s;" | psql postgres' % env)
-    func('psql -c "ALTER TABLE public.spatial_ref_sys OWNER TO %(project_name)s" %(project_name)s;' % env)
-    func('psql -c "ALTER TABLE public.geometry_columns OWNER TO %(project_name)s" %(project_name)s;'% env )
+    func('echo "CREATE USER %(db_name)s WITH PASSWORD \'%(database_password)s\';" | psql postgres' % env)
+    func('createdb -O %(db_name)s %(db_name)s -T template_postgis' % env)
+    func('echo "GRANT ALL PRIVILEGES ON %(db_name)s to %(db_name)s;" | psql postgres' % env)
+    func('psql -c "ALTER TABLE public.spatial_ref_sys OWNER TO %(db_name)s" %(db_name)s;' % env)
+    func('psql -c "ALTER TABLE public.geometry_columns OWNER TO %(db_name)s" %(db_name)s;'% env )
     
 def destroy_database(func=run):
     """
@@ -123,8 +124,8 @@ def destroy_database(func=run):
     Will not cause the fab to fail if they do not exist.
     """
     with settings(warn_only=True):
-        func('dropdb %(project_name)s' % env)
-        func('dropuser %(project_name)s' % env)
+        func('dropdb %(db_name)s' % env)
+        func('dropuser %(db_name)s' % env)
 
 def load_data():
     """
@@ -134,7 +135,7 @@ def load_data():
         run("mkdir %(dbserver_path)s/data/%(project_name)s" % env)
     local("scp %(localpath)s/data/dump.sql.gz %(user)s@data.apps.cironline.org:data/%(project_name)s" % env)
     run("gunzip %(dbserver_path)s/data/%(project_name)s/dump.sql.gz" % env)
-    run('psql -U %(project_name)s -q %(project_name)s < %(dbserver_path)s/data/%(project_name)s/dump.sql' % env)
+    run('psql -U %(db_name)s -q %(db_name)s < %(dbserver_path)s/data/%(project_name)s/dump.sql' % env)
     
 def pgbouncer_down():
     """

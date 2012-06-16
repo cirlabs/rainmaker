@@ -18,7 +18,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'rainmaker',
+        'NAME': 'rainmaker_wa',
         'PORT': '5432',
         'HOST': 'localhost',
     }
@@ -128,11 +128,13 @@ INSTALLED_APPS = (
     
     # External apps
     'gunicorn',
+    'chunks',
  
     # Project apps
     'apps.core',
     'apps.contributions',
     'apps.donors',
+    'apps.props',
 )
 
 # Caching
