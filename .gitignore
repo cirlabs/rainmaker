@@ -1,3 +1,4 @@
--e *.pyc
+*.pyc
 data
 rainmaker/gzip
+rainmaker/static
