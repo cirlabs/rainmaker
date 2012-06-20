@@ -11,14 +11,43 @@ class RelatedDonorInline(admin.TabularInline):
 class DonorAdmin(admin.ModelAdmin):
     inlines = [RelatedDonorInline,]
     filter_horizontal = ('badges',)
-    list_display = ['name', 'type', 'location', 'line_of_work', 'contribs_sum', 'contribs_count',
+    list_display = ['name', 'type', 'line_of_work', 'contribs_sum', 'contribs_count',
                      'date_added', 'date_updated', 'published']
-    search_fields = ['name', 'location', 'line_of_work', 'bio', 'title']
+    search_fields = ['name', 'location_city', 'location_state', 'line_of_work', 'bio', 'title']
     list_filter = ['type',]
     list_editable = ['published']
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'type', 'bio', 'line_of_work', 'published')
+        }),
+        ('Location information', {
+            'fields': ('location_city', 'location_state')
+        }),
+        ('Image information', {
+            'fields': ('image', 'image_credit', 'image_credit_url')
+        }),
+        ('Contribution information', {
+            'fields': ('contribs_count', 'contribs_sum', 'badges')
+        }),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('slug',)
+        }),
+    )
 admin.site.register(Donor, DonorAdmin)
 
 
 class BadgeAdmin(admin.ModelAdmin):
-    pass
+    fieldsets = (
+        (None, {
+            'fields': ('name', 'short_description', 'long_description', 'image')
+        }),
+        ('Display information', {
+            'fields': ('active', 'sort_order')
+        }),
+        ('Advanced options', {
+            'classes': ('collapse',),
+            'fields': ('slug',)
+        }),
+    )
 admin.site.register(Badge, BadgeAdmin)

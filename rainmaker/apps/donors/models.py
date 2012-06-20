@@ -35,19 +35,22 @@ class DonorBase(models.Model):
     Abstract base model to represent core attributes of Donor objects.
     """
     name = models.CharField(max_length=255, db_index=True)
-    slug = models.SlugField(max_length=50, unique=True, db_index=True)
+    slug = models.SlugField(max_length=50, unique=True, db_index=True,
+        help_text="Don't change this unless you know what you're doing")
     type = models.CharField(max_length=1, choices=(('C', 'Group'), ('I', 'Individual')), db_index=True)
-    location = models.CharField(max_length=50, blank=True)
-    title = models.CharField(max_length=50, blank=True)
-    bio = models.TextField(blank=True)
-    location_city = models.CharField(max_length=255, blank=True)
+    bio = models.TextField(blank=True,
+        help_text="A short biography of the donor. Will show up on donor detail pages.")
+    location_city = models.CharField(max_length=255, blank=True,
+        help_text="Donor's headquarters or primary place of residence.")
     location_state = USStateField(blank=True)
-    line_of_work = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(upload_to='donors', blank=True)
+    line_of_work = models.CharField(max_length=255, blank=True,
+        help_text="Brief description of the donor's industry or occupation.")
+    image = models.ImageField(upload_to='donors', blank=True,
+        help_text='Mug shot or other image of the donor. Optional.')
     image_credit = models.CharField(max_length=255, blank=True)
     image_credit_url = models.URLField(max_length=255, blank=True)
-    contribs_sum = models.FloatField(blank=True, null=True)
-    contribs_count = models.IntegerField(blank=True, null=True)
+    contribs_sum = models.FloatField('Sum of contributions', blank=True, null=True)
+    contribs_count = models.IntegerField('Count of contributions', blank=True, null=True)
     badges = models.ManyToManyField('Badge', blank=True, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
@@ -182,12 +185,13 @@ class BadgeBase(models.Model):
     slug = models.SlugField(max_length=50, unique=True, db_index=True)
     image = models.ImageField(upload_to='badges', null=True, blank=True)
     short_description = models.TextField(max_length=255, blank=True)
-    long_description = models.TextField(max_length=255, blank=True)
+    long_description = models.TextField(blank=True)
     sort_order = models.IntegerField(null=True)
     active = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
+        ordering = ['name',]
 
     def __unicode__(self):
         return self.name
