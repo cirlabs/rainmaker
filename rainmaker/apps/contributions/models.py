@@ -6,6 +6,9 @@ from apps.props.models import Proposition, RelatedCommittee
 ########## BASE MODELS AND ABSTRACT CLASSES (DON'T MESS WITH THESE) ##########
 
 class Catcode(models.Model):
+    """
+    Simple model representing industry category codes created by NIMSP and CRP.
+    """
     source = models.CharField(max_length=255)
     code = models.CharField(primary_key=True, max_length=10, db_index=True)
     name = models.CharField(max_length=255)
@@ -17,6 +20,10 @@ class Catcode(models.Model):
 
 
 class ContributionBase(models.Model):
+    """
+    Abstract model directly representing the NIMSP data as provided by the
+    Sunlight Foundation. Don't modify this or it will break load scripts.
+    """
     cycle = models.IntegerField(db_index=True)
     transaction_namespace = models.CharField(max_length=255, blank=True)
     transaction_id = models.CharField(max_length=255, db_index=True)
@@ -178,6 +185,13 @@ class RelatedContribution(models.Model):
             return False
 
     @property
+    def bool_committee(self):
+        if self.contribution.recipient_type == 'C':
+            return True
+        else:
+            return False
+
+    @property
     def bool_party(self):
         if self.contribution.recipient_type == 'C' and not self.contribution.is_ballot:
             return True
@@ -227,7 +241,6 @@ class RelatedContribution(models.Model):
             if self.contribution.related_proposition.result == 'P':
                 bool_wins = True
             return bool_wins
-            #no winners for party races
         else:
             return False
 

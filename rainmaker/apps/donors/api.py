@@ -28,8 +28,8 @@ class DonorResource(ModelResource):
         
         bundle.data['total_contributions_count'] = bundle.obj.contribs_count
         bundle.data['candidate_contributions_count'] = bundle.obj.cand_contrib_count
+        bundle.data['committee_contributions_count'] = bundle.obj.cmte_contrib_count
         bundle.data['ballot_contributions_count'] = bundle.obj.ballot_contrib_count
-        bundle.data['party_contributions_count'] = bundle.obj.party_contrib_count
         
         bundle.data['full_url'] = '%s%s' % (full_url_prefix, bundle.obj.get_absolute_url())
         
@@ -74,7 +74,7 @@ class DonorContributionResource(ModelResource):
                 "amount": int(round(rc.contribution.amount,0)),
                 "bool_ballot": rc.bool_ballot,
                 "bool_candidate": rc.bool_candidate,
-                "bool_party": rc.bool_party,
+                "bool_committee": rc.bool_committee,
                 "bool_win": win,
                 "bool_loss": loss,
             })

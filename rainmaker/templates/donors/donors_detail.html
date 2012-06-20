@@ -101,7 +101,7 @@
             <section id="win-loss"{% ifequal donor.image '' %} class="extra-wide"{% endifequal %}>
                 <h1>Win/loss percentage</h1>
                 <div id="win-loss-pct">{{ donor.win_pct }}</div>
-                <p>${{ donor.wins_money|floatformat:0|intcomma }} to winners, ${{ donor.losses_money|floatformat:0|intcomma }} to losers</p>
+                <p>${{ donor.wins_money|floatformat:0|intcomma }} to winners, ${{ donor.losses_money|floatformat:0|intcomma }} to losers{% if donor.ballot_contrib_count == 0%}<br/><em>(Does not include ballot measures)</em><p>{% endif %}
             </section>
 
             <p id="donor-bio">{{ donor.bio|safe }}</p>
@@ -110,7 +110,7 @@
 
         <section id="contribution-totals">
             <h1>Total contributions: ${{ donor.contribs_sum|floatformat:0|intcomma }}</h1>
-            <div id="contribution-stats">{{ donor.contribs_count|intcomma }} donations: {{ donor.cand_contrib_count|intcomma }} to candidates, {{ donor.ballot_contrib_count|intcomma }} to ballot measures and {{ donor.party_contrib_count|intcomma }} to parties</div>
+            <div id="contribution-stats">{{ donor.contribs_count|intcomma }} donations: {{ donor.cand_contrib_count|intcomma }} to candidates and {{ donor.cmte_contrib_count|intcomma }} to committees {% if donor.ballot_contrib_count > 0 %} (including {{ donor.ballot_contrib_count}} to ballot measures){% endif %}
         </section>
 
         <figure id="contribution-timeline" class="clearfix">
@@ -125,7 +125,7 @@
                     <li><a href="Javascript:buildTimeline('{{ donor.slug }}','timeline-chart');">&raquo; All donations</a></li> 
                     <li><a href="Javascript:buildTimeline('{{ donor.slug }}?type=D','timeline-chart');">&raquo; To Dems</a></li>
                     <li><a href="Javascript:buildTimeline('{{ donor.slug }}?type=R','timeline-chart');">&raquo; To GOP</a></li>
-                    <li><a href="Javascript:buildTimeline('{{ donor.slug }}?type=I','timeline-chart');">&raquo; Ballot measures, other races</a></li>
+                    <li><a href="Javascript:buildTimeline('{{ donor.slug }}?type=I','timeline-chart');">&raquo; To issue, party committees</a></li>
                 </ul>
 
             </div>

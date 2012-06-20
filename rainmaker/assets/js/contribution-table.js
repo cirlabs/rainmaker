@@ -11,7 +11,7 @@ function writeTable(strDonorID) {
 	
 	$.getJSON(strServerRoot + 'api/v1/donor-contributions/' + strDonorID + '/?format=json', function(data) {
 	
-		var strTableHeader = '<thead><tr><th class="date">Date</th><th class="recipient">Recipient</th><th class="amount">Amount</th><th class="hidden-td">is ballot?</th><th class="hidden-td">is candidate?</th><th class="hidden-td">is party?</th><th class="hidden-td">is winner?</th><th class="hidden-td">is loser?</th></tr></thead>';
+		var strTableHeader = '<thead><tr><th class="date">Date</th><th class="recipient">Recipient</th><th class="amount">Amount</th><th class="hidden-td">is ballot?</th><th class="hidden-td">is candidate?</th><th class="hidden-td">is committee?</th><th class="hidden-td">is winner?</th><th class="hidden-td">is loser?</th></tr></thead>';
 		
 		var strTableRows = '';
 		$.each(data.contributions, function(numKey, objRow) {
@@ -48,7 +48,7 @@ function writeTable(strDonorID) {
  			strTDs += '<td class="amount">$' + addCommas(objRow.amount) + '</td>';
  			strTDs += '<td class="hidden-td">' + objRow.bool_ballot + '</td>';
  			strTDs += '<td class="hidden-td">' + objRow.bool_candidate + '</td>';
- 			strTDs += '<td class="hidden-td">' + objRow.bool_party + '</td>';
+ 			strTDs += '<td class="hidden-td">' + objRow.bool_committee + '</td>';
  			strTDs += '<td class="hidden-td">' + objRow.bool_win + '</td>';
  			strTDs += '<td class="hidden-td">' + objRow.bool_loss + '</td>';
 						
@@ -124,7 +124,7 @@ function parseTable() {
 		}
 	});
 	
-	$("div.toolbar").html('<span id="type-check-group"><h4>Show donations to</h4><input id="ballot_checkbox" type="checkbox" checked="checked"/> Ballot measures &nbsp;&nbsp;<input id="candidate_checkbox" type="checkbox" checked="checked"/> Candidates &nbsp;&nbsp;<input id="party_checkbox" type="checkbox" checked="checked"/> Parties</span><span id="result-check-group"><h4>Results</h4><input id="win_checkbox" type="checkbox" checked="checked"/> Wins &nbsp;&nbsp;<input id="loss_checkbox" type="checkbox" checked="checked"/> Losses</span>');
+	$("div.toolbar").html('<span id="type-check-group"><h4>Show donations to</h4><input id="candidate_checkbox" type="checkbox" checked="checked"/> Candidates &nbsp;&nbsp;<input id="party_checkbox" type="checkbox" checked="checked"/> Committees</span><span id="result-check-group"><h4>Results</h4><input id="win_checkbox" type="checkbox" checked="checked"/> Wins &nbsp;&nbsp;<input id="loss_checkbox" type="checkbox" checked="checked"/> Losses</span>');
 		
 	jQuery.fn.dataTableExt.afnFiltering.push(
 	  function( oSettings, aData, iDataIndex ) {
