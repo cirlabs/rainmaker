@@ -131,6 +131,7 @@ INSTALLED_APPS = (
     # External apps
     'gunicorn',
     'chunks',
+    'devserver',
  
     # Project apps
     'apps.core',

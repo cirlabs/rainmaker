@@ -18,7 +18,12 @@ class Command(BaseCommand):
 
         for row in raw_data:
             transaction_id = row['transaction_id']
-            record, created = Contribution.objects.get_or_create(transaction_id=transaction_id)
+            created = False
+            try: # Manual step-through of get_or_create sans the commit
+                record = Contribution.objects.get(transaction_id=transaction_id)
+            except Contribution.DoesNotExist:
+                record = Contribution()
+                created = True
             # Programmatically set model fields according to input fields. Note that
             # the model field name and the input field name from the CSV have to be
             # the same or this will crash. Shouldn't be a problem if you're using data
@@ -28,7 +33,6 @@ class Command(BaseCommand):
                 # Get the field from the model so we can retrieve its attributes (such as null)
                 modelfield = Contribution._meta.get_field(field)
                 data_element = row[field]
-
                 # Deals with special cases where blank values being fed into null fields makes
                 # Postgres throw a fit.
                 if modelfield.null == True:

@@ -147,6 +147,8 @@ class RelatedContribution(models.Model):
                 output_str += 'governor/lieutenant governor'
             elif self.contribution.seat == 'state:office':
                 output_str += 'statewide office'
+            if self.contribution.seat == 'state:judicial':
+                output_str += 'judicial office '
                 
             if self.bool_winner == True:
                 approved_text = '(Successful)'
@@ -177,7 +179,7 @@ class RelatedContribution(models.Model):
 
     @property
     def bool_party(self):
-        if self.contribution.recipient_type == 'C' and self.contribution.is_ballot != 'T':
+        if self.contribution.recipient_type == 'C' and not self.contribution.is_ballot:
             return True
         else:
             return False

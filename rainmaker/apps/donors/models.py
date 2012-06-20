@@ -67,14 +67,18 @@ class DonorBase(models.Model):
 
     @property
     def wins_money(self):
-        output = self.relatedcontribution_set.filter(contribution__new_contest_result='W').aggregate(Sum('contribution__amount'))['contribution__amount__sum']
+        output = self.relatedcontribution_set.filter(
+            contribution__new_contest_result='W').aggregate(
+                Sum('contribution__amount'))['contribution__amount__sum']
         if not output:
             output = 0
         return output
 
     @property
     def losses_money(self):
-        output = self.relatedcontribution_set.filter(contribution__new_contest_result='L').aggregate(Sum('contribution__amount'))['contribution__amount__sum']
+        output = self.relatedcontribution_set.filter(
+            contribution__new_contest_result='L').aggregate(
+                Sum('contribution__amount'))['contribution__amount__sum']
         if not output:
             output = 0
         return output
@@ -93,6 +97,12 @@ class DonorBase(models.Model):
     def cand_contrib_count(self):
         count = self.relatedcontribution_set.filter(contribution__recipient_type='P').count()
         return count
+
+    @property
+    def cmte_contrib_count(self):
+        count = self.relatedcontribution_set.filter(contribution__recipient_type='C').count()
+        return count        
+
         
     @property
     def ballot_contrib_count(self):
@@ -101,13 +111,16 @@ class DonorBase(models.Model):
 
     @property
     def party_contrib_count(self):
-        count = self.relatedcontribution_set.exclude(contribution__related_proposition__isnull=False).filter(contribution__recipient_type='C').count()
+        count = self.relatedcontribution_set.exclude(
+            contribution__related_proposition__isnull=False).filter(
+                contribution__recipient_type='C').count()
+                #Todo: contains Republican or Democrat??
         return count
 
     @property
     def donor_rank(self):
         #check if group or individual
-        rank_list = self.__class__.published_objects.filter(type=self.type)
+        rank_list = self.__class__.published_objects.filter(type=self.type)[:50]
         rank = competition_rank(rank_list, self, 'contribs_sum', direction='desc')
         return rank
 
@@ -167,6 +180,29 @@ class RelatedDonor(models.Model):
     def __unicode__(self):
         return repr(self.related_donor)
 
+    def reset_totals(self):
+        """
+        Resets donor count and sum totals based on changes to related donors.
+        """
+        # Reset counts
+        self.donor.contribs_count = self.donor.relatedcontribution_set.all().count()
+        self.related_donor.contribs_count = self.related_donor.relatedcontribution_set.all().count()
+
+        # Reset sums
+        donor_sum = self.donor.relatedcontribution_set.all().aggregate(
+            Sum('contribution__amount'))['contribution__amount__sum']
+        if not donor_sum:
+            donor_sum = 0
+
+        related_donor_sum = self.related_donor.relatedcontribution_set.all().aggregate(
+            Sum('contribution__amount'))['contribution__amount__sum']
+        if not related_donor_sum:
+            related_donor_sum = 0
+
+        self.donor.contribs_sum = donor_sum
+        self.related_donor.contribs_sum = related_donor_sum
+        return
+
     def save(self, *args, **kwargs):
         """
         Reassigns related contributions when a RelatedDonor is added.
@@ -174,8 +210,10 @@ class RelatedDonor(models.Model):
         super(RelatedDonor, self).save(*args, **kwargs)
         for rc in self.related_donor.relatedcontribution_set.all():
             self.donor.relatedcontribution_set.add(rc)
-        # TODO: RESET DONOR SUM, COUNT
+        self.reset_totals()
+        self.related_donor.save()
         self.donor.save()
+        return
 
     def delete(self, *args, **kwargs):
         """
@@ -183,5 +221,8 @@ class RelatedDonor(models.Model):
         """
         for rc in self.donor.relatedcontribution_set.filter(contribution__donor_name=self.related_donor.name):
             self.related_donor.relatedcontribution_set.add(rc)
+        self.reset_totals()
         self.related_donor.save()
+        self.donor.save()
         super(RelatedDonor, self).delete(*args, **kwargs)
+        return

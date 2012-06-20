@@ -14,7 +14,7 @@ class DonorBaseListView(ListView):
     """
     context_object_name = 'donor_list'
     template_name = 'donors/donors_list.html'
-    queryset = Donor.objects.all().order_by('-contribs_sum')
+    #queryset = Donor.objects.all().order_by('-contribs_sum')
 
 
 class DonorBaseDetailView(DetailView):
