@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.signals import pre_delete
+from django.contrib.localflavor.us.models import USStateField
 from apps.donors.models import Donor
 from apps.props.models import Proposition, RelatedCommittee
 
@@ -24,46 +25,58 @@ class ContributionBase(models.Model):
     Abstract model directly representing the NIMSP data as provided by the
     Sunlight Foundation. Don't modify this or it will break load scripts.
     """
-    cycle = models.IntegerField(db_index=True)
+    cycle = models.IntegerField('Election cycle', db_index=True)
     transaction_namespace = models.CharField(max_length=255, blank=True)
-    transaction_id = models.CharField(max_length=255, db_index=True)
+    transaction_id = models.CharField(max_length=255, db_index=True,
+        help_text='Unique transaction ID assigned by NIMSP. Cannot be left blank')
     transaction_type = models.CharField(max_length=255, blank=True)
     filing_id = models.CharField(max_length=255, blank=True)
-    is_amendment = models.CharField(max_length=255, blank=True)
+    is_amendment = models.CharField(max_length=255, blank=True, help_text='Whether the data is from an amended report.')
     amount = models.FloatField(blank=True, null=True, db_index=True)
     date = models.CharField(max_length=15, blank=True)
     contributor_name = models.CharField(max_length=255, blank=True, db_index=True)
-    contributor_ext_id = models.IntegerField(blank=True, null=True)
-    contributor_type = models.CharField(max_length=255, blank=True)
+    contributor_ext_id = models.IntegerField(blank=True, null=True, help_text='NIMSP-standardized ID for large contributors.')
+    contributor_type = models.CharField(max_length=1, blank=True,
+        choices=(('C', 'Committee'), ('I', 'Individual')))
     contributor_occupation = models.CharField(max_length=255, blank=True)
     contributor_employer = models.CharField(max_length=255, blank=True)
     contributor_gender = models.CharField(max_length=255, blank=True)
     contributor_address = models.CharField(max_length=255, blank=True)
     contributor_city = models.CharField(max_length=255, blank=True)
-    contributor_state = models.CharField(max_length=255, blank=True)
+    contributor_state = USStateField(blank=True)
     contributor_zipcode = models.CharField(max_length=25, blank=True)
     contributor_category = models.ForeignKey(Catcode, db_column='contributor_category', blank=True, null=True, db_index=True)
     organization_name = models.CharField(max_length=255, blank=True, db_index=True)
-    organization_ext_id = models.IntegerField(blank=True, null=True)
-    parent_organization_name = models.CharField(max_length=255, blank=True, db_index=True)
-    parent_organization_ext_id = models.IntegerField(blank=True, null=True)
+    organization_ext_id = models.IntegerField(blank=True, null=True, help_text='NIMSP-standardized ID for large organizational contributors.')
+    parent_organization_name = models.CharField(max_length=255, blank=True, db_index=True, help_text='NIMSP-determined parent organization.')
+    parent_organization_ext_id = models.IntegerField(blank=True, null=True, help_text='NIMSP-standardized ID for parent organization.')
     recipient_name = models.CharField(max_length=255, blank=True, db_index=True)
-    recipient_ext_id = models.IntegerField(blank=True, null=True)
-    recipient_party = models.CharField(max_length=255,blank=True)
-    recipient_type = models.CharField(max_length=255, blank=True)
-    recipient_state = models.CharField(max_length=255, blank=True)
+    recipient_ext_id = models.IntegerField(blank=True, null=True, help_text='NIMSP-standardized recipient ID.')
+    recipient_party = models.CharField(max_length=1, blank=True, 
+        choices=(('D', 'Democrat'), ('R', 'Republican'), ('I', 'Independent'), ('N', 'Nonpartisan')))
+    recipient_type = models.CharField(max_length=1, blank=True,
+        choices=(('C', 'Committee'), ('P', 'Person')))
+    recipient_state = USStateField(max_length=255, blank=True)
     recipient_state_held = models.CharField(max_length=255, blank=True)
     recipient_category = models.CharField(max_length=255, blank=True)
     committee_name = models.CharField(max_length=255, blank=True)
     committee_ext_id = models.IntegerField(blank=True, null=True)
-    committee_party = models.CharField(max_length=255, blank=True)
-    candidacy_status = models.CharField(max_length=255, blank=True)
+    committee_party = models.CharField(max_length=255, blank=True,
+        choices=(('D', 'Democrat'), ('R', 'Republican'), ('I', 'Independent'), ('N', 'Nonpartisan')))
+    candidacy_status = models.CharField(max_length=1, blank=True,
+        choices=(('t', 'True'), ('f', 'False')))
     district = models.CharField(max_length=255, blank=True)
     district_held = models.CharField(max_length=255, blank=True)
-    seat = models.CharField(max_length=255, blank=True)
-    seat_held = models.CharField(max_length=255)
+    seat = models.CharField(max_length=255, blank=True,
+        choices=(('state:governor', 'Governor'),
+            ('state:office', 'Statewide office'),
+            ('state:upper', 'State: Upper house'),
+            ('state:lower', 'State: Lower house'),
+            ('state:judicial', 'State: Judicial')))
+    seat_held = models.CharField(max_length=255, blank=True)
     seat_status = models.CharField(max_length=255, blank=True)
-    seat_result = models.CharField(max_length=255, blank=True, db_index=True)
+    seat_result = models.CharField(max_length=1, blank=True, db_index=True,
+        choices=(('W', 'Win'), ('L', 'Loss')))
 
     class Meta:
         ordering = ('-date',)
@@ -81,8 +94,8 @@ class ContributionBase(models.Model):
 ########## CHILD CLASSES AND CONCRETE MODELS (MESS WITH THESE) ##########
 
 class Contribution(ContributionBase):
-    date_fixed = models.DateField(blank=True, null=True, db_index=True)
-    donor_name = models.CharField(max_length=255, blank=True, null=True, db_index=True)
+    date_fixed = models.DateField('Date', blank=True, null=True, db_index=True)
+    donor_name = models.CharField('Standardized donor name', max_length=255, blank=True, null=True, db_index=True)
     related_proposition = models.ForeignKey(Proposition, db_index=True, blank=True, null=True)
     new_contest_result = models.CharField(max_length=1, blank=True, null=True)
 
@@ -238,7 +251,7 @@ class RelatedContribution(models.Model):
         elif self.bool_ballot:
             #Check for cases with split results, send 'both' if found
             bool_wins = False
-            if self.contribution.related_proposition.result == 'P':
+            if self.contribution.related_proposition.result == 'F':
                 bool_wins = True
             return bool_wins
         else:

@@ -133,10 +133,10 @@ class DonorBase(models.Model):
                 continue
             if rc.contribution.related_proposition.result == 'P':
                  if prop_donor.position == 'A':
-                    ballot_wins += rc.contribution.amount
+                    ballot_losses += rc.contribution.amount
             elif rc.contribution.related_proposition.result == 'F':
                 if prop_donor.position == 'P':
-                    ballot_wins += rc.contribution.amount
+                    ballot_losses += rc.contribution.amount
         return contest_losses + ballot_losses
 
     @property
@@ -184,9 +184,12 @@ class BadgeBase(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50, unique=True, db_index=True)
     image = models.ImageField(upload_to='badges', null=True, blank=True)
-    short_description = models.TextField(max_length=255, blank=True)
-    long_description = models.TextField(blank=True)
-    sort_order = models.IntegerField(null=True)
+    short_description = models.CharField(max_length=255, blank=True,
+        help_text='A brief one-sentence description of the badge.')
+    long_description = models.TextField(blank=True,
+        help_text='A longer, more detailed description of the badge and its criteria.')
+    sort_order = models.IntegerField(null=True,
+        help_text='The order you want the badge to appear on the list view page.')
     active = models.BooleanField(default=True)
 
     class Meta:

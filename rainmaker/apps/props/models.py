@@ -7,10 +7,9 @@ class PropositionBase(models.Model):
     """
     Abstract base class representing ballot measures.
     """
-    election_date = models.DateField(blank=True, null=True, db_index=True)
-    cycle = models.IntegerField(null=True)
+    cycle = models.IntegerField('Election cycle', null=True)
     title = models.CharField(blank=True, max_length=100)
-    number = models.CharField(blank=True, max_length=50)
+    number = models.CharField(blank=True, max_length=4)
     subject = models.CharField(blank=True, max_length=100)
     description = models.CharField(blank=True, max_length=255)
     result = models.CharField(max_length=1, choices=(('P', 'Passed'), ('F', 'Failed')))
@@ -46,4 +45,4 @@ class RelatedCommittee(models.Model):
     position = models.CharField(max_length=1, choices=(('F', 'For'), ('A', 'Against')))
 
     def __unicode__(self):
-        return '%s: %s -> %s' % (position, donor, proposition)
+        return '%s: %s -> %s' % (self.position, self.donor, self.proposition)
