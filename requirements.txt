@@ -7,7 +7,7 @@ Paste==1.7.5.1
 PasteDeploy==1.5.0
 PasteScript==1.7.5
 boto==2.5.2
-chunks==0.1
+-e git://github.com/clintecker/django-chunks.git#egg=chunks
 django-debug-toolbar==0.9.4
 django-devserver==0.3.2
 django-project-templates==0.11
