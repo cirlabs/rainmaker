@@ -86,7 +86,7 @@ def setup_heroku():
     local("git init")
     local("git add .")
     local("git commit -m 'Initial commit'")
-    local("heroku create -s cedar --buildpack http://github.com/cirlabs/heroku-buildpack-geodjango.git" % env)
+    local("heroku create -s cedar" % env)
 
 def deploy_to_heroku():
     local("pip freeze > requirements.txt")
