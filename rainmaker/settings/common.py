@@ -25,15 +25,12 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'rainmaker_wa',
-        'PORT': '6432', # PgBouncer port
-        'HOST': 'data.apps.cironline.org',
-        'USER': 'rainmaker_wa',
-        'PASSWORD': '31c3Ybvhvs'
+        'PORT': '5432',
+        'HOST': 'localhost',
     }
 }
 
@@ -133,7 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.gis',
+#    'django.contrib.gis',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
     'django.contrib.admin',
