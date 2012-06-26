@@ -9,9 +9,7 @@ class PropositionBase(models.Model):
     """
     cycle = models.IntegerField('Election cycle', null=True)
     title = models.CharField(blank=True, max_length=100)
-    number = models.CharField(blank=True, max_length=4)
-    subject = models.CharField(blank=True, max_length=100)
-    description = models.CharField(blank=True, max_length=255)
+    number = models.CharField('Proposition number', blank=True, max_length=8)
     result = models.CharField(max_length=1, choices=(('P', 'Passed'), ('F', 'Failed')))
     ext_link = models.URLField(null=True, blank=True, max_length=255)
 

@@ -12,6 +12,7 @@ Base configuration
 """
 env.project_name = 'rainmaker'
 env.db_name = 'rainmaker_wa'
+env.s3_name = 'rainmaker-wa'
 env.database_password = '31c3Ybvhvs'
 env.site_media_prefix = "site_media"
 env.admin_media_prefix = "admin_media"
@@ -134,8 +135,8 @@ def load_data():
     with settings(warn_only=True):
         run("mkdir %(dbserver_path)s/data/%(project_name)s" % env)
     local("scp %(localpath)s/data/dump.sql.gz %(user)s@data.apps.cironline.org:data/%(project_name)s" % env)
-    run("gunzip %(dbserver_path)s/data/%(project_name)s/dump.sql.gz" % env)
-    run('psql -U %(db_name)s -q %(db_name)s < %(dbserver_path)s/data/%(project_name)s/dump.sql' % env)
+    run("gunzip %(dbserver_path)s/data/%(db_name)s/dump.sql.gz" % env)
+    run('psql -U %(db_name)s -q %(db_name)s < %(dbserver_path)s/data/%(db_name)s/dump.sql' % env)
     
 def pgbouncer_down():
     """
@@ -164,14 +165,14 @@ def gzip_assets():
     GZips every file in the assets directory and places the new file
     in the gzip directory with the same filename.
     """
-    local('cd %s; python ./bin/gzip_assets.py' % BASE_DIR)
+    local('cd %s; python ./gzip_assets.py' % BASE_DIR)
 
 def deploy_to_s3():
     """
     Deploy the latest project site media to S3.
     """
     env.gzip_path = '%(localpath)s/%(project_name)s/gzip/static/' % env
-    local(('s3cmd -P --add-header=Content-encoding:gzip --guess-mime-type --rexclude-from=%(localpath)s/s3exclude sync %(gzip_path)s s3://%(s3_bucket)s/%(project_name)s/%(site_media_prefix)s/') % env)
+    local(('s3cmd -P --add-header=Content-encoding:gzip --guess-mime-type --rexclude-from=%(localpath)s/s3exclude sync %(gzip_path)s s3://%(s3_bucket)s/%(s3_name)s/%(site_media_prefix)s/') % env)
 
 def deploy_static():
     local("python ./%(project_name)s/manage.py collectstatic" % env)
@@ -189,7 +190,7 @@ def shiva_the_destroyer():
         prompt("What's the name of your app on Heroku? (ex. strong-sword-3895):", key='appname')
         local('heroku apps:destroy --app %(appname)s' % env)
         destroy_database()
-        run('s3cmd del --recursive s3://%(s3_bucket)s/%(project_name)s' % env)
+        run('s3cmd del --recursive s3://%(s3_bucket)s/%(s3_name)s' % env)
 
 def shiva_local():
     """

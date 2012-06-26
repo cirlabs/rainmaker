@@ -13,7 +13,7 @@ class DonorAdmin(admin.ModelAdmin):
     filter_horizontal = ('badges',)
     list_display = ['name', 'type', 'line_of_work', 'contribs_sum', 'contribs_count',
                      'date_added', 'date_updated', 'published']
-    search_fields = ['name', 'location_city', 'location_state', 'line_of_work', 'bio', 'title']
+    search_fields = ['name', 'location_city', 'location_state', 'line_of_work', 'bio']
     list_filter = ['type',]
     list_editable = ['published']
     fieldsets = (

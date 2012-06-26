@@ -14,6 +14,8 @@ class Command(BaseCommand):
                 Sum("amount"), Count('amount')).order_by('-amount__sum')
 
         for g in groups:
+            if float(g['amount__sum']) < 1000: continue
+            
             slug = slugify(g['donor_name'])[:45]
             if g['contributor_type']:
                 slug += '-%s' % g['contributor_type'].lower()
@@ -32,5 +34,5 @@ class Command(BaseCommand):
             donor.save()
 
             for contribution in Contribution.objects.filter(donor_name=donor.name):
-                rc, created = RelatedContribution.objects.get_or_create(contribution=contribution, donor=donor
+                rc, created = RelatedContribution.objects.get_or_create(contribution=contribution, donor=donor)
         self.stdout.write('Thanks for your patience! Donors created successfully!\n')
