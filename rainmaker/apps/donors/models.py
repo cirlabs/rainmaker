@@ -98,7 +98,7 @@ class DonorBase(models.Model):
         if not contest_wins: contest_wins = 0.0
 
         ballot_wins = 0.0
-        for rc in self.relatedcontribution_set.all():
+        for rc in self.relatedcontribution_set.filter(contribution__related_proposition__isnull=False):
             try:
                 prop_donor = RelatedCommittee.objects.get(
                     proposition__contribution=rc.contribution, donor=rc.donor)
@@ -125,7 +125,7 @@ class DonorBase(models.Model):
         if not contest_losses: contest_losses = 0.0
 
         ballot_losses = 0.0
-        for rc in self.relatedcontribution_set.all():
+        for rc in self.relatedcontribution_set.filter(contribution__related_proposition__isnull=False):
             try:
                 prop_donor = RelatedCommittee.objects.get(
                     proposition__contribution=rc.contribution, donor=rc.donor)
