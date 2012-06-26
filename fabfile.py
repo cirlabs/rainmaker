@@ -106,7 +106,7 @@ Database setup and deploy
 """
 
 def dump_database(func=local):
-    func('pg_dump --no-owner %(project_name)s | gzip -c > %(localpath)s/data/dump.sql.gz' % env)
+    func('pg_dump --no-owner %(db_name)s | gzip -c > %(localpath)s/data/dump.sql.gz' % env)
     
 def create_database(func=run):
     """
@@ -133,8 +133,8 @@ def load_data():
     Loads data from the repository into PostgreSQL.
     """
     with settings(warn_only=True):
-        run("mkdir %(dbserver_path)s/data/%(project_name)s" % env)
-    local("scp %(localpath)s/data/dump.sql.gz %(user)s@data.apps.cironline.org:data/%(project_name)s" % env)
+        run("mkdir %(dbserver_path)s/data/%(db_name)s" % env)
+    local("scp %(localpath)s/data/dump.sql.gz %(user)s@data.apps.cironline.org:data/%(db_name)s" % env)
     run("gunzip %(dbserver_path)s/data/%(db_name)s/dump.sql.gz" % env)
     run('psql -U %(db_name)s -q %(db_name)s < %(dbserver_path)s/data/%(db_name)s/dump.sql' % env)
     

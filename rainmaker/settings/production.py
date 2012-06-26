@@ -15,7 +15,7 @@ DATABASES = {
         'NAME': 'rainmaker_wa',
         'PORT': '6432', # PgBouncer port
         'HOST': 'data.apps.cironline.org',
-        'USER': 'rainmaker',
+        'USER': 'rainmaker_wa',
         'PASSWORD': '31c3Ybvhvs'
     }
 }
