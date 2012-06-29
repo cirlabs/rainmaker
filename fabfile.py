@@ -11,9 +11,9 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 Base configuration
 """
 env.project_name = 'rainmaker'
-env.db_name = 'rainmaker_wa'
-env.s3_name = 'rainmaker-wa'
-env.database_password = '31c3Ybvhvs'
+env.db_name = 'rainmaker'
+env.s3_name = 'rainmaker'
+env.database_password = '31qc3Ybvhvs'
 env.site_media_prefix = "site_media"
 env.admin_media_prefix = "admin_media"
 env.dbserver_path = '/home/projects' % env

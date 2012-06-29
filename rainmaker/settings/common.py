@@ -2,16 +2,6 @@ import logging
 import os
 import django
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-AWS_ACCESS_KEY_ID = 'AKIAIGSN5LP2MLIXYBYQ'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'rainmakerapp-washington'
-
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-
-from S3 import CallingFormat
-AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
-
 # Base paths
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -28,11 +18,8 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'rainmaker_wa',
-        'PORT': '6432', # PgBouncer port
-        'HOST': 'data.apps.cironline.org',
-        'USER': 'rainmaker_wa',
-        'PASSWORD': '31c3Ybvhvs'
+        'NAME': 'rainmaker',
+        'USER': 'rainmaker',
     }
 }
 
@@ -132,7 +119,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-#    'django.contrib.gis',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
     'django.contrib.admin',

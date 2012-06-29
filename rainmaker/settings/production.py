@@ -3,37 +3,37 @@ from common import *
 DEBUG = False
 
 # S3 and storages settings
+# Fill these in if you want S3 storage enabled
+DEFAULT_FILE_STORAGE = ''
+AWS_ACCESS_KEY_ID = ''
+AWS_SECRET_ACCESS_KEY = ''
+AWS_STORAGE_BUCKET_NAME = ''
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
-AWS_ACCESS_KEY_ID = 'AKIAIGSN5LP2MLIXYBYQ'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'media.apps.cironline.org/rainmaker-wa'
+from S3 import CallingFormat
+AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
 
+# Fill these in
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'rainmaker_wa',
-        'PORT': '6432', # PgBouncer port
-        'HOST': 'data.apps.cironline.org',
-        'USER': 'rainmaker_wa',
-        'PASSWORD': '31c3Ybvhvs'
+        'NAME': 'rainmaker',
+        'PORT': '',
+        'HOST': '',
+        'USER': '',
+        'PASSWORD': ''
     }
 }
 
-# Static
-STATIC_URL = 'http://media.apps.cironline.org/rainmaker-wa/site_media/'
+# Static (Fill this in too)
+STATIC_URL = ''
 
-ADMIN_MEDIA_PREFIX = 'http://media.apps.cironline.org/rainmaker-wa/site_media/admin/'
+ADMIN_MEDIA_PREFIX = ''
 
-# GEOS paths for GeoDjango and GDAL. Configured for our particular Heroku setup.
-#GEOS_LIBRARY_PATH = '/app/.geodjango/geos/lib/libgeos_c.so'
-#GDAL_LIBRARY_PATH = '/app/.geodjango/gdal/lib/libgdal.so'
-
-# Caching
+# Caching (Fill this in too)
 CACHE_MIDDLEWARE_SECONDS = 90 * 60 # 90 minutes
 
 CACHES = {
     'default': {
-        'BACKEND': 'django_pylibmc.memcached.PyLibMCCache'
+        'BACKEND': ''
     }
 }
