@@ -284,7 +284,7 @@ function buildTimeline(strSlug,strTargetID) {
 	//progress wheel
 	$('#contribution-timeline').append('<div class="progress-wheel"><img class="wheel" src="http://media.apps.cironline.org/rainmaker/site_media/image/progress-wheel-30.gif" width="30" height="30"/>Loading timeline ...</div>');
 	
-	$.getJSON(strServerRoot + 'json/timeline/' + strSlug, function(objYears) {
+	$.getJSON(strServerRoot + 'json/timeline/' + strSlug + '/', function(objYears) {
 		$('#' + strTargetID).html('');
 		objTimeline = new timelineChart(strTargetID,615,180,objYears);
 

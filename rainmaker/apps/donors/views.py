@@ -59,6 +59,10 @@ class DonorBaseTimelineJSON(TemplateView):
             }).values('year', 'week').annotate(Sum('contribution__amount')).order_by('year', 'week')
         return {'weeks': weeks}
 
+    def render_to_response(self, context, **kwargs):
+        return super(DonorBaseTimelineJSON, self).render_to_response(context,
+                        content_type='application/json', **kwargs)
+
 
 class BadgeBaseListView(ListView):
     """
