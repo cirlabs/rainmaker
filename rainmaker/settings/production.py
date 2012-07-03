@@ -8,6 +8,7 @@ DEFAULT_FILE_STORAGE = ''
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 AWS_STORAGE_BUCKET_NAME = ''
+AWS_LOCATION = '' # Subdirectory within your bucket. Works with boto.
 
 from S3 import CallingFormat
 AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
