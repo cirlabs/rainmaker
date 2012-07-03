@@ -71,14 +71,14 @@
             </style>
 
             <section id="badges"{% ifequal donor.image '' %} class="extra-wide"{% endifequal %}>
-                <h1>Badges</h1>
+                {% if donor.badges.all %}<h1>Badges</h1>
                 <ul>{% for b in donor.badges.all %}
                     <li title="{{ b.name }}" data-content="{{ b.short_description }}">
                         <a href="{{ b.get_absolute_url }}"><img src="{{ STATIC_URL }}{{ b.image }}" width="40" height="40"/></a>
                         <div class="badge-name">{{ b.name }}</div>
                         <a href="{{ b.get_absolute_url }}">what's this?</a>
                     </li>
-                {% endfor %}</ul>
+                {% endfor %}</ul>{% endif %}
 
                 <script>
 
