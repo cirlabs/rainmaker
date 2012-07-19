@@ -44,7 +44,7 @@ class DonorContributionResource(ModelResource):
 
     def dehydrate(self, bundle):
         contributions = []
-        for rc in bundle.obj.relatedcontribution_set.all():
+        for rc in bundle.obj.relatedcontribution_set.select_related().all():
             #check for explainer text
             explainers = []
             if not rc.bool_party:
