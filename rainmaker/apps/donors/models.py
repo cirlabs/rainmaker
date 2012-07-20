@@ -12,14 +12,14 @@ class GroupManager(models.Manager):
     Returns published group donors.
     """
     def get_query_set(self):
-        return super(GroupManager, self).get_query_set().filter(published=True, type='C')
+        return super(GroupManager, self).get_query_set().filter(published=True, type='C').order_by('-contribs_sum')
 
 class IndividualManager(models.Manager):
     """
     Returns published individual donors.
     """
     def get_query_set(self):
-        return super(IndividualManager, self).get_query_set().filter(published=True, type='I')
+        return super(IndividualManager, self).get_query_set().filter(published=True, type='I').order_by('-contribs_sum')
 
 class PublishedManager(models.Manager):
     """
