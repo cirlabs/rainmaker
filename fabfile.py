@@ -30,7 +30,7 @@ def production():
     env.settings = 'production'
     env.hosts = ['data.apps.cironline.org']
     env.user = 'projects'
-    env.s3_bucket = 'media.apps.cironline.org'
+    env.s3_bucket = env.s3_name
 
 """
 Running OSX?
