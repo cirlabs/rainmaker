@@ -8,13 +8,12 @@ from apps.contributions.models import Contribution
 
 ########## BASE VIEWS (INHERIT FROM THESE) ##########
 
-class DonorBaseListView(ListView):
+class DonorBaseListView(TemplateView):
     """
     Main view showing the list of top donors. Used as an index page.
     """
     context_object_name = 'donor_list'
     template_name = 'donors/donors_list.html'
-    #queryset = Donor.objects.all().order_by('-contribs_sum')
 
 
 class DonorBaseDetailView(DetailView):
@@ -102,8 +101,8 @@ class DonorListView(DonorBaseListView):
     
     def get_context_data(self, **kwargs):
         context = super(DonorBaseListView, self).get_context_data(**kwargs)
-        context['group_donor_list'] = Donor.groups.filter(type='C').order_by('-contribs_sum')[:50]
-        context['indiv_donor_list'] = Donor.individuals.filter(type='I').order_by('-contribs_sum')[:50]
+        context['group_donor_list'] = Donor.groups.prefetch_related('badges').all()[:50]
+        context['indiv_donor_list'] = Donor.individuals.prefetch_related('badges').all()[:50]
         context['tab'] = 'indiv'
         if self.kwargs.has_key('tab'):
             context['tab'] = self.kwargs['tab']
