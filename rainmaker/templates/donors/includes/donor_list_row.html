@@ -1,6 +1,6 @@
 {% load humanize %}
 				<tr>
-					<td class="rank">{{ donor.donor_rank }}</td>
+					<td class="rank">{{ forloop.counter }}</td>
 					<td class="donor">
 						{% if donor.image %}
 						<img class="mug" src="{{ STATIC_URL }}{{ donor.image }}" width="50"/>
