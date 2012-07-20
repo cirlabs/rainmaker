@@ -51,7 +51,10 @@ class DonorBase(models.Model):
     image_credit_url = models.URLField(max_length=255, blank=True)
     contribs_sum = models.FloatField('Sum of contributions', blank=True, null=True)
     contribs_count = models.IntegerField('Count of contributions', blank=True, null=True)
-    badges = models.ManyToManyField('Badge', blank=True, null=True)
+    cand_contrib_count = models.IntegerField('Count of candidate contributions', blank=True, null=True)
+    cmte_contrib_count = models.IntegerField('Count of committee contributions', blank=True, null=True)
+    ballot_contrib_count = models.IntegerField('Count of ballot measure contributions', blank=True, null=True)
+    badges = models.ManyToManyField('Badge', blank=True, null=True, db_index=True)
     date_added = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     published = models.BooleanField(default=True)
@@ -151,30 +154,36 @@ class DonorBase(models.Model):
         except ZeroDivisionError:
             return "N/A"
 
-    @property
-    def cand_contrib_count(self):
+    def _set_cand_contrib_count(self):
         """
-        Returns a count of the number of contributions a donor gave to candidates.
+        Sets a count of the number of contributions a donor gave to candidates.
         """
         count = self.relatedcontribution_set.filter(contribution__recipient_type='P').count()
-        return count
+        self.cand_contrib_count = count
+        return
 
-    @property
-    def cmte_contrib_count(self):
+    def _set_cmte_contrib_count(self):
         """
-        Returns a count of the number of contributions a donor gave to committees, such as
+        Sets a count of the number of contributions a donor gave to committees, such as
         parties and ballot measures.
         """
         count = self.relatedcontribution_set.filter(contribution__recipient_type='C').count()
-        return count        
+        self.cmte_contrib_count = count
+        return      
 
-    @property
-    def ballot_contrib_count(self):
+    def _set_ballot_contrib_count(self):
         """
-        Returns a count of the number of contributions a donor gave specifically to ballot measures.
+        Sets a count of the number of contributions a donor gave specifically to ballot measures.
         """
         count = self.relatedcontribution_set.filter(contribution__related_proposition__isnull=False).count()
-        return count
+        self.ballot_contrib_count = count
+        return
+
+    def save(self, *args, **kwargs):
+        self._set_cmte_contrib_count()
+        self._set_ballot_contrib_count()
+        self._set_cand_contrib_count()
+        super(DonorBase, self).save(*args, **kwargs)
 
 
 class BadgeBase(models.Model):
@@ -238,8 +247,8 @@ class RelatedDonor(models.Model):
     name but are improperly standardized in the dataset. Basically, it lets users in the admin
     interface lump together the contributions of multiple donors into one.
     """
-    donor = models.ForeignKey(Donor, related_name='orig_donor')
-    related_donor = models.ForeignKey(Donor)
+    donor = models.ForeignKey(Donor, related_name='orig_donor', db_index=True)
+    related_donor = models.ForeignKey(Donor, db_index=True )
 
     def __unicode__(self):
         return repr(self.related_donor)
