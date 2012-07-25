@@ -10,10 +10,12 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 """
 Base configuration
 """
+
+# CHANGE THESE TO FIT YOUR PROJECT
 env.project_name = 'rainmaker'
 env.db_name = 'rainmaker'
 env.s3_name = 'rainmaker'
-env.database_password = '' # Database password
+env.database_password = ''
 env.site_media_prefix = "site_media"
 env.admin_media_prefix = "admin_media"
 env.dbserver_path = '/home/projects' % env
@@ -27,6 +29,8 @@ def production():
     """
     Work on production environment
     """
+    
+    # CHANGE THESE TOO
     env.settings = 'production'
     env.hosts = [''] # Database host URL
     env.user = '' # DB user with permission to create roles, DBs
