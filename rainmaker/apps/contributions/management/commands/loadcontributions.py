@@ -3,6 +3,14 @@ from datetime import datetime
 from django.core.management.base import BaseCommand, CommandError
 from apps.contributions.models import Contribution
 
+def create_records(records):
+    '''
+    Helper function to bulk create records.
+    '''
+    Contribution.objects.bulk_create(records)
+    return
+
+
 class Command(BaseCommand):
     help = 'Processes dates, names and other information for contributions table'
     args = args = 'path/to/file.csv'
@@ -16,7 +24,17 @@ class Command(BaseCommand):
         self.stdout.write('Loading contribution records (this might take a while) ...\n')
         raw_data = csv.DictReader(open(input_file, 'rU'), delimiter=',', quotechar='"')
 
-        for row in raw_data:
+        i = 0 # Loop counter to trigger bulk saves
+        bulk_records = []
+        while True:
+            # Manually iterate and be sure to save on final iteration
+            try:
+                row = raw_data.next()
+            except StopIteration: # This is thrown once the iterator is empty, which triggers save on last item
+                create_records(bulk_records)
+                self.stdout.write('%s records created ...\n' % i) 
+                break # Be sure to break the loop. This is is the exit condition.
+
             transaction_id = row['transaction_id']
             created = False
             try: # Manual step-through of get_or_create sans the commit
@@ -51,7 +69,13 @@ class Command(BaseCommand):
                 record.new_contest_result = record.seat_result
                 record.related_proposition = None
 
-            # Save
-            record.save()
+            # Bulk insert every 5,000 records
+            bulk_records.append(record)
+            if i % 5000 == 0:
+                create_records(bulk_records)
+                self.stdout.write('%s records created ...\n' % i)            
+                bulk_records = []
+
+            i += 1 # Increment
 
         self.stdout.write('Thanks for your patience! Records imported successfully!\n')
