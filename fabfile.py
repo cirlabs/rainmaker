@@ -11,9 +11,9 @@ BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 Base configuration
 """
 env.project_name = 'rainmaker'
-env.db_name = 'rainmaker_ma'
+env.db_name = 'rainmaker'
 env.s3_name = 'rainmaker'
-env.database_password = '31qc3Ybvhvs'
+env.database_password = '' # Database password
 env.site_media_prefix = "site_media"
 env.admin_media_prefix = "admin_media"
 env.dbserver_path = '/home/projects' % env
@@ -28,9 +28,12 @@ def production():
     Work on production environment
     """
     env.settings = 'production'
-    env.hosts = ['data.apps.cironline.org']
-    env.user = 'projects'
+    env.hosts = [''] # Database host URL
+    env.user = '' # DB user with permission to create roles, DBs
     env.s3_bucket = env.s3_name
+    env.singlehost = ''
+    if len(env.hosts) == 1:
+        env.singlehost = env.hosts[0]
 
 """
 Running OSX?
@@ -134,7 +137,7 @@ def load_data():
     """
     with settings(warn_only=True):
         run("mkdir %(dbserver_path)s/data/%(db_name)s" % env)
-    local("scp %(localpath)s/data/dump.sql.gz %(user)s@data.apps.cironline.org:data/%(db_name)s" % env)
+    local("scp %(localpath)s/data/dump.sql.gz %(user)s@%(singlehost)s:data/%(db_name)s" % env)
     run("gunzip %(dbserver_path)s/data/%(db_name)s/dump.sql.gz" % env)
     run('psql -U %(db_name)s -q %(db_name)s < %(dbserver_path)s/data/%(db_name)s/dump.sql' % env)
     
