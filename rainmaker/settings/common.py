@@ -18,8 +18,8 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'rainmaker',
-        'USER': 'rainmaker',
+        'NAME': 'rainmaker_ma',
+        'USER': 'rainmaker_ma',
     }
 }
 
@@ -123,8 +123,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.admindocs',
-    'django.contrib.flatpages',
     'django.contrib.sites',
+    'django.contrib.flatpages',
     
     # External apps
     'gunicorn',
