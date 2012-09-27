@@ -5,7 +5,7 @@
 						{% if donor.image %}
 						<img class="mug" src="{{ STATIC_URL }}{{ donor.image }}" width="50"/>
 						{% endif %}
-						<span class="donor-name"><a href="{{ donor.get_absolute_url }}">{{ donor.name }}</a>{% if donor.location_city != '' %}, {{ donor.location_city }}{% endif %}{% if donor.location_state != '' %}, {{ donor.location_state }}{% endif %}</span>
+						<span class="donor-name"><a href="{{ donor.get_absolute_url }}">{{ donor.name|upper }}</a>{% if donor.location_city != '' %}, {{ donor.location_city }}{% endif %}{% if donor.location_state != '' %}, {{ donor.location_state }}{% endif %}</span>
 						<span class="donor-descrip">{{ donor.line_of_work }}</span>
 						{{ donor.contribs_count|intcomma }} donations: {{ donor.cand_contrib_count|intcomma }} to candidates and {{ donor.cmte_contrib_count|intcomma }} to committees {% if donor.ballot_contrib_count > 0 %} (including {{ donor.ballot_contrib_count}} to ballot measures){% endif %}
 					</td>
