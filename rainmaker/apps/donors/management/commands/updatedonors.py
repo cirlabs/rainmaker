@@ -33,6 +33,10 @@ class Command(BaseCommand):
             donor.contribs_count = float(g['amount__count'])
             donor.save()
 
+            donor._set_cand_contrib_count()
+            donor._set_cmte_contrib_count()
+            donor._set_ballot_contrib_count()
+
             for contribution in Contribution.objects.filter(donor_name=donor.name):
                 rc, created = RelatedContribution.objects.get_or_create(contribution=contribution, donor=donor)
         self.stdout.write('Thanks for your patience! Donors created successfully!\n')
