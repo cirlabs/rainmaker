@@ -179,7 +179,7 @@ def deploy_to_s3():
     Deploy the latest project site media to S3.
     """
     env.gzip_path = '%(localpath)s/%(project_name)s/gzip/static/' % env
-    local(('s3cmd -P --add-header=Content-encoding:gzip --guess-mime-type --rexclude-from=%(localpath)s/s3exclude sync %(gzip_path)s s3://%(s3_bucket)s/%(s3_name)s/%(site_media_prefix)s/') % env)
+    local(('s3cmd -P --add-header=Content-encoding:gzip --guess-mime-type --rexclude-from=%(localpath)s/s3exclude sync %(gzip_path)s s3://%(s3_bucket)s/%(site_media_prefix)s/') % env)
 
 def deploy_static():
     local("python ./%(project_name)s/manage.py collectstatic" % env)
