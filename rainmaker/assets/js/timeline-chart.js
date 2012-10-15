@@ -121,7 +121,7 @@ function timelineRow (objPaper,objParentChart) {
 	self.objParentChart = objParentChart;
 	self.objPaper = objPaper;
 	self.numWidth = 280;
-	self.numHeight = 15;
+	self.numHeight = 55;
 	self.numX = 0;
 	self.numY = 0;
 	self.numXPadding = 1;
@@ -130,9 +130,9 @@ function timelineRow (objPaper,objParentChart) {
 	self.numFontSize = 11;	
 
 	self.numBoxWidth = 10;
-	self.numBoxHeight = 10;
+	self.numBoxHeight = 45;
 	
-	self.numGreatestDonationLevel = 1000000;
+	self.numGreatestDonationLevel = 50000;
 	
 	self.boolColorMode = true;
 	
@@ -229,8 +229,8 @@ function timelineChart (strTarget, numChartWidth, numChartHeight, objJSON) {
 	self.years = [];
 	self.objJSON = objJSON;
 	
-	self.minYear = 2001;
-	self.maxYear = 2011;
+	self.minYear = 2011;
+	self.maxYear = 2012;
 	
 }
 

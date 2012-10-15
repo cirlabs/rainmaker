@@ -13,9 +13,9 @@ Base configuration
 
 # CHANGE THESE TO FIT YOUR PROJECT
 env.project_name = 'rainmaker'
-env.db_name = 'rainmaker'
-env.s3_name = 'rainmaker'
-env.database_password = ''
+env.db_name = 'rainmaker_pa'
+env.s3_name = 'rainmaker-hosted/pa'
+env.database_password = '31c3234rdcopadYbvha'
 env.site_media_prefix = "site_media"
 env.admin_media_prefix = "admin_media"
 env.dbserver_path = '/home/projects' % env
@@ -32,8 +32,8 @@ def production():
     
     # CHANGE THESE TOO
     env.settings = 'production'
-    env.hosts = [''] # Database host URL
-    env.user = '' # DB user with permission to create roles, DBs
+    env.hosts = ['ec2-23-22-202-70.compute-1.amazonaws.com'] # Database host URL
+    env.user = 'projects' # DB user with permission to create roles, DBs
     env.s3_bucket = env.s3_name
     env.singlehost = ''
     if len(env.hosts) == 1:

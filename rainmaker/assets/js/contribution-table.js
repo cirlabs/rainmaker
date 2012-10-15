@@ -124,7 +124,7 @@ function parseTable() {
 		}
 	});
 	
-	$("div.toolbar").html('<span id="type-check-group"><h4>Show donations to</h4><input id="candidate_checkbox" type="checkbox" checked="checked"/> Candidates &nbsp;&nbsp;<input id="party_checkbox" type="checkbox" checked="checked"/> Committees</span><span id="result-check-group"><h4>Results</h4><input id="win_checkbox" type="checkbox" checked="checked"/> Wins &nbsp;&nbsp;<input id="loss_checkbox" type="checkbox" checked="checked"/> Losses</span>');
+	$("div.toolbar").html('<span id="type-check-group"><h4>Show donations to</h4><input id="candidate_checkbox" type="checkbox" checked="checked"/> Candidates &nbsp;&nbsp;<input id="party_checkbox" type="checkbox" checked="checked"/> Committees</span><span id="result-check-group"><span style="display:none"><h4>Results</h4><input id="win_checkbox" type="checkbox" checked="checked"/> Wins &nbsp;&nbsp;<input id="loss_checkbox" type="checkbox" checked="checked"/> Losses</span></span>');
 		
 	jQuery.fn.dataTableExt.afnFiltering.push(
 	  function( oSettings, aData, iDataIndex ) {

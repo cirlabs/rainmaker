@@ -181,7 +181,7 @@ class RelatedContribution(models.Model):
             output.append(explainer)
         else:
             output = [] 
-        return output
+        return []
 
     @property
     def bool_ballot(self):

@@ -2,39 +2,41 @@ from common import *
 
 DEBUG = False
 
-# S3 and storages settings
-# Fill these in if you want S3 storage enabled
-DEFAULT_FILE_STORAGE = ''
-AWS_ACCESS_KEY_ID = ''
-AWS_SECRET_ACCESS_KEY = ''
-AWS_STORAGE_BUCKET_NAME = ''
-AWS_LOCATION = '' # Subdirectory within your bucket. Works with boto.
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+AWS_ACCESS_KEY_ID = 'AKIAIGSN5LP2MLIXYBYQ'
+AWS_SECRET_ACCESS_KEY = '7D0YmoYQl8ZW567EdE0c/CVyvUjTjPEYhBQrLCle'
+AWS_STORAGE_BUCKET_NAME = 'rainmaker-hosted'
+AWS_LOCATION = 'pa/site_media'
 
 from S3 import CallingFormat
 AWS_CALLING_FORMAT = CallingFormat.SUBDOMAIN
 
-# Fill these in
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'rainmaker',
-        'PORT': '',
-        'HOST': '',
-        'USER': '',
-        'PASSWORD': ''
+        'NAME': 'rainmaker_pa',
+        'PORT': '6432', # PgBouncer port
+        'HOST': 'ec2-23-22-202-70.compute-1.amazonaws.com',
+        'USER': 'rainmaker_pa',
+        'PASSWORD': '31c3234rdcopadYbvha'
     }
 }
 
-# Static (Fill this in too)
-STATIC_URL = ''
+# Static
+STATIC_URL = 'https://rainmaker-hosted.s3.amazonaws.com/pa/site_media/'
 
-ADMIN_MEDIA_PREFIX = ''
+ADMIN_MEDIA_PREFIX = 'https://s3.amazonaws.com/rainmaker-hosted/pa/site_media/admin/'
 
-# Caching (Fill this in too)
-CACHE_MIDDLEWARE_SECONDS = 90 * 60 # 90 minutes
+# GEOS paths for GeoDjango and GDAL. Configured for our particular Heroku setup.
+GEOS_LIBRARY_PATH = '/app/.geodjango/geos/lib/libgeos_c.so'
+GDAL_LIBRARY_PATH = '/app/.geodjango/gdal/lib/libgdal.so'
+
+# Caching
+CACHE_MIDDLEWARE_SECONDS = 5 * 60 # 5 minutes
 
 CACHES = {
     'default': {
-        'BACKEND': ''
+        'BACKEND': 'django_pylibmc.memcached.PyLibMCCache'
     }
 }
