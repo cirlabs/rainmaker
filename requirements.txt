@@ -6,8 +6,10 @@ PIL==1.1.7
 Paste==1.7.5.1
 PasteDeploy==1.5.0
 PasteScript==1.7.5
+Pillow==1.7.7
 boto==2.5.2
--e git://github.com/clintecker/django-chunks.git#egg=chunks
+-e git://github.com/clintecker/django-chunks.git@d22a51071e99d3d9f2a90c0361b658bbb211fe36#egg=django_chunks-dev
+django-ckeditor==3.6.2.1
 django-debug-toolbar==0.9.4
 django-devserver==0.3.2
 django-project-templates==0.11
