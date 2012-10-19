@@ -98,12 +98,6 @@
                 </script>
             </section>
 
-            <section id="win-loss"{% ifequal donor.image '' %} class="extra-wide"{% endifequal %}>
-                <h1>Win/loss percentage</h1>
-                <div id="win-loss-pct">{{ donor.win_pct }}</div>
-                <p>${{ donor.wins_money|floatformat:0|intcomma }} to winners, ${{ donor.losses_money|floatformat:0|intcomma }} to losers{% if donor.ballot_contrib_count == 0%}<br/><em>(Does not include ballot measures)</em><p>{% endif %}
-            </section>
-
             <p id="donor-bio">{{ donor.bio|safe }}</p>
 
         </section>
