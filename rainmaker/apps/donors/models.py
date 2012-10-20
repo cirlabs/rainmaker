@@ -37,7 +37,7 @@ class DonorBase(models.Model):
     name = models.CharField(max_length=255, db_index=True)
     slug = models.SlugField(max_length=50, unique=True, db_index=True,
         help_text="Don't change this unless you know what you're doing")
-    type = models.CharField(max_length=1, choices=(('C', 'Group'), ('I', 'Individual')), db_index=True)
+    type = models.CharField(max_length=1, choices=(('C', 'Couple'), ('I', 'Individual')), db_index=True)
     bio = models.TextField(blank=True,
         help_text="A short biography of the donor. Will show up on donor detail pages.")
     location_city = models.CharField(max_length=255, blank=True,
